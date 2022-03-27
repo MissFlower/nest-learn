@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Flavor } from './flavor.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 @Entity() // 每一个Entity类代表一个SQL表
 // 默认情况下 TypeORM将根据我们的小写类名来命名SQL表
 // 所以将生成的SQL表 是“coffee”, 小写 sql table === 'coffee
@@ -13,6 +20,9 @@ export class Coffee {
   @Column()
   brand: string;
 
-  @Column('json', { nullable: true }) // 变成可选的
-  flavors: string[];
+  @JoinTable() // 有助于指定关系的OWNER端 在本例重视Coffee Entity
+  @ManyToMany((type) => Flavor, (flavor) => flavor.coffees, {
+    cascade: true, // ['insert']
+  }) // 设置多对多关系
+  flavors: Flavor[];
 }
