@@ -2,18 +2,22 @@ import { Coffee } from './entities/coffee.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { Event } from 'src/events/entities/event.entity';
 
 @Injectable()
 export class CoffeesService {
   constructor(
     @InjectRepository(Coffee)
     private readonly coffeeRepository: Repository<Coffee>,
+
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
+
+    private readonly dataSource: DataSource,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -73,6 +77,34 @@ export class CoffeesService {
     const coffee = await this.findOne(id);
     // 这里我们不需要判断coffee是否存在是因为findOne已经做过了处理
     return this.coffeeRepository.remove(coffee);
+  }
+
+  async recommendCoffee(coffee: Coffee) {
+    const queryRunner = this.dataSource.createQueryRunner();
+
+    await queryRunner.connect(); // 连接到数据库
+    await queryRunner.startTransaction(); // 开始交易
+
+    try {
+      coffee.recommendations++;
+
+      const recommendEvent = new Event();
+      recommendEvent.name = 'recommend_coffee';
+      recommendEvent.type = 'coffee';
+      recommendEvent.payload = { coffeeId: coffee.id };
+
+      // 使用queryRunner实体管理器来保存coffee和事件实体
+      await queryRunner.manager.save(coffee);
+      await queryRunner.manager.save(recommendEvent);
+
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // 如果出现错误 通过回滚整个事务来防止数据库中的不一致
+      await queryRunner.rollbackTransaction(); // 事务回滚
+    } finally {
+      // 确保一切完成以后释放或关闭queryRunner实体
+      await queryRunner.release();
+    }
   }
 
   private async preloadFlavorByName(name: string): Promise<Flavor> {

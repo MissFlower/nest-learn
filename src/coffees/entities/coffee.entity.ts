@@ -20,6 +20,9 @@ export class Coffee {
   @Column()
   brand: string;
 
+  @Column({ default: 0 })
+  recommendations: number; // 推荐量 默认0
+
   @JoinTable() // 有助于指定关系的OWNER端 在本例重视Coffee Entity
   @ManyToMany((type) => Flavor, (flavor) => flavor.coffees, {
     cascade: true, // ['insert']
