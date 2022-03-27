@@ -15,9 +15,7 @@ export class CoffeesService {
     private readonly coffeeRepository: Repository<Coffee>,
 
     @InjectRepository(Flavor)
-    private readonly flavorRepository: Repository<Flavor>,
-
-    private readonly dataSource: DataSource,
+    private readonly flavorRepository: Repository<Flavor>, // private readonly dataSource: DataSource,
   ) {}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -80,23 +78,21 @@ export class CoffeesService {
   }
 
   async recommendCoffee(coffee: Coffee) {
-    const queryRunner = this.dataSource.createQueryRunner();
-
+    const dataSource = new DataSource({
+      type: 'postgres',
+    });
+    const queryRunner = dataSource.createQueryRunner();
     await queryRunner.connect(); // 连接到数据库
     await queryRunner.startTransaction(); // 开始交易
-
     try {
       coffee.recommendations++;
-
       const recommendEvent = new Event();
       recommendEvent.name = 'recommend_coffee';
       recommendEvent.type = 'coffee';
       recommendEvent.payload = { coffeeId: coffee.id };
-
       // 使用queryRunner实体管理器来保存coffee和事件实体
       await queryRunner.manager.save(coffee);
       await queryRunner.manager.save(recommendEvent);
-
       await queryRunner.commitTransaction();
     } catch (err) {
       // 如果出现错误 通过回滚整个事务来防止数据库中的不一致
