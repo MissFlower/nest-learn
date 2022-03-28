@@ -5,10 +5,17 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { ConfigModule } from '@nestjs/config';
+// import Joi from '@hapi/joi';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), // 从默认位置加载和解析我们的.env文件
+    ConfigModule.forRoot({
+      // // 默认所有都是可选的
+      // validationSchema: Joi.object({
+      //   database_host: Joi.required(),
+      //   database_port: Joi.number().default(5432),
+      // }),
+    }), // 从默认位置加载和解析我们的.env文件
     CoffeesModule,
     TypeOrmModule.forRoot({
       //请记住 我们只在主AppModule中使用了forRoot() 其他模块都将使用forFeature()
