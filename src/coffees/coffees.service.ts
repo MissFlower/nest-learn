@@ -51,7 +51,7 @@ export class CoffeesService {
     });
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const coffee = await this.coffeeRepository.findOne({
       where: {
         id: +id,
@@ -75,7 +75,7 @@ export class CoffeesService {
     return this.coffeeRepository.save(coffee);
   }
 
-  async update(id: string, updateCoffeeDto: UpdateCoffeeDto) {
+  async update(id: number, updateCoffeeDto: UpdateCoffeeDto) {
     const flavors =
       updateCoffeeDto.flavors &&
       (await Promise.all(
@@ -95,7 +95,7 @@ export class CoffeesService {
     return this.coffeeRepository.save(coffee);
   }
 
-  async remove(id: string) {
+  async remove(id: number) {
     const coffee = await this.findOne(id);
     // 这里我们不需要判断coffee是否存在是因为findOne已经做过了处理
     return this.coffeeRepository.remove(coffee);

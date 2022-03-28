@@ -1,3 +1,4 @@
+import { ParseIntPipe } from './../common/pipes/parse-int.pipe';
 import { CoffeesService } from './coffees.service';
 import {
   Body,
@@ -34,8 +35,11 @@ export class CoffeesController {
   }
 
   // 根据路由获取动态参数
+  @Public()
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    console.log(`findOne:::${id}`);
+
     return this.coffeesService.findOne(id);
     // return `This action retruns #${id} coffee`;
   }
@@ -53,14 +57,14 @@ export class CoffeesController {
 
   // 更新 由于patch是对单个资源进行部分更新 因此它需要一个id和表示给定资源的所有可能的有效负载
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+  update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
     return this.coffeesService.update(id, updateCoffeeDto);
     // return `This action updates #${id} coffee`;
   }
 
   // 删除
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return this.coffeesService.remove(id);
     // return `This action removes #${id} coffee`;
   }
