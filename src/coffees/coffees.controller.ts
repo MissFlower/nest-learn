@@ -15,6 +15,7 @@ import {
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { Public } from 'src/common/decorators/public.decorator';
 
 @Controller('coffees')
 export class CoffeesController {
@@ -22,6 +23,7 @@ export class CoffeesController {
     console.log('CoffeesController created');
   }
 
+  @Public()
   @Get()
   // localhost:3000/coffees?limit=20&offset=10
   findAll(@Query() paginationQuery: PaginationQueryDto) {
