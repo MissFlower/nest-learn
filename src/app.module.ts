@@ -5,6 +5,7 @@ import { CatsController } from './cats/cats.controller';
 import { AbcController } from './modules/abc/abc.controller';
 import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       autoLoadEntities: true, // 自动加载模块 而不是制定实体数组
       synchronize: true, // 同步 确保我们的TypeORM实体在每次运行应用程序时都会与数据库同步 切记 只用于开发 生产中禁用
     }),
+    CoffeeRatingModule,
   ],
   controllers: [AppController, CatsController, AbcController],
   providers: [AppService],

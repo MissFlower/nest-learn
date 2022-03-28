@@ -10,5 +10,6 @@ import { Event } from 'src/events/entities/event.entity';
   imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])], // 使用forFeature()将TypeORM注册到此子模块中 请记住 在此之前我们在主AppModule中使用了forRoot() 但我们只这样做了一次 其他模块都将使用forFeature()
   controllers: [CoffeesController],
   providers: [CoffeesService],
+  exports: [CoffeesService], // 这里需要到处 否则别的模块(coffee-rating)无法使用
 })
 export class CoffeesModule {}

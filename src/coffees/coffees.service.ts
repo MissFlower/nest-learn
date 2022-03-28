@@ -8,7 +8,7 @@ import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
 
-@Injectable()
+@Injectable() // 此装饰器将CoffeesService类标记为“提供者”
 export class CoffeesService {
   constructor(
     @InjectRepository(Coffee)
