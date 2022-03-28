@@ -5,16 +5,13 @@ import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { ConfigModule } from '@nestjs/config';
+import appConfig from './config/app.config';
 // import Joi from '@hapi/joi';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      // // 默认所有都是可选的
-      // validationSchema: Joi.object({
-      //   database_host: Joi.required(),
-      //   database_port: Joi.number().default(5432),
-      // }),
+      load: [appConfig],
     }), // 从默认位置加载和解析我们的.env文件
     CoffeesModule,
     TypeOrmModule.forRoot({

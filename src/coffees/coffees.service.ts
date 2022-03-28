@@ -32,8 +32,8 @@ export class CoffeesService {
   ) {
     // console.log(coffeeBrands);
     // console.log(coffeeFlavors);
-    const databaseHost = this.configService.get<string>(
-      'DATABASE_HOST',
+    const databaseHost = this.configService.get(
+      'database.host',
       'localhost', // 如果没有设置DATABASE_HOST 则将localhost设置为默认值
     );
     console.log(databaseHost);
