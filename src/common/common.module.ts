@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ApiKeyGuard } from './guards/api-key.guard';
+import { TimeoutInterceptor } from './interceptors/timeout.interceptor';
 import { WrapResponseInterceptor } from './interceptors/wrap-response.interceptor';
 
 @Module({
@@ -9,6 +10,7 @@ import { WrapResponseInterceptor } from './interceptors/wrap-response.intercepto
   providers: [
     { provide: APP_GUARD, useClass: ApiKeyGuard },
     { provide: APP_INTERCEPTOR, useClass: WrapResponseInterceptor },
+    { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
   ],
 })
 export class CommonModule {}

@@ -26,8 +26,9 @@ export class CoffeesController {
   @Public()
   @Get()
   // localhost:3000/coffees?limit=20&offset=10
-  findAll(@Query() paginationQuery: PaginationQueryDto) {
+  async findAll(@Query() paginationQuery: PaginationQueryDto) {
     // const { limit, offset } = paginationQuery;
+    await new Promise((resolve) => setTimeout(resolve, 5000));
     return this.coffeesService.findAll(paginationQuery);
     // return `This action returns all coffees. Limit: ${limit}, offset: ${offset}`;
   }
