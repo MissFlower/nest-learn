@@ -6,6 +6,7 @@ import { Module, Injectable } from '@nestjs/common';
 import { Flavor } from './entities/flavor.entity';
 import { Event } from 'src/events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_FLAVORS } from './coffees.constants';
+import { ConfigModule } from '@nestjs/config';
 
 class ConfigService {}
 class DevelopmentConfigService {}
@@ -20,7 +21,7 @@ export class CoffeeFlavorsFactory {
 }
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event])], // 使用forFeature()将TypeORM注册到此子模块中 请记住 在此之前我们在主AppModule中使用了forRoot() 但我们只这样做了一次 其他模块都将使用forFeature()
+  imports: [TypeOrmModule.forFeature([Coffee, Flavor, Event]), ConfigModule], // 使用forFeature()将TypeORM注册到此子模块中 请记住 在此之前我们在主AppModule中使用了forRoot() 但我们只这样做了一次 其他模块都将使用forFeature()
   controllers: [CoffeesController],
   providers: [
     CoffeesService,

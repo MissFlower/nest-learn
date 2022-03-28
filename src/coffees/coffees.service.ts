@@ -8,8 +8,9 @@ import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_FLAVORS } from './coffees.constants';
+import { ConfigService } from '@nestjs/config';
 
-@Injectable({ scope: Scope.REQUEST }) // 此装饰器将CoffeesService类标记为“提供者”
+@Injectable({ scope: Scope.DEFAULT }) // 此装饰器将CoffeesService类标记为“提供者”
 // scope: Scope.DEFAULT 默认值 只实例化一次
 // scope: Scope.TRANSIENT 转瞬的 每次都会实例化
 // scope: Scope.REQUEST 会在每次请求时 实例化 并在请求完后进行垃圾回收  使用与回去ip adress, cookies, headers
@@ -26,9 +27,16 @@ export class CoffeesService {
 
     @Inject(COFFEE_FLAVORS)
     coffeeFlavors: string[],
+
+    private readonly configService: ConfigService,
   ) {
-    console.log(coffeeBrands);
-    console.log(coffeeFlavors);
+    // console.log(coffeeBrands);
+    // console.log(coffeeFlavors);
+    const databaseHost = this.configService.get<string>(
+      'DATABASE_HOST',
+      'localhost', // 如果没有设置DATABASE_HOST 则将localhost设置为默认值
+    );
+    console.log(databaseHost);
   }
 
   findAll(paginationQuery: PaginationQueryDto) {
