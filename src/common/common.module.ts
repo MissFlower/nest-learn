@@ -1,4 +1,5 @@
-import { Module } from '@nestjs/common';
+import { LoggingMiddleware } from './middleware/logging.middleware';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ApiKeyGuard } from './guards/api-key.guard';
@@ -13,4 +14,8 @@ import { WrapResponseInterceptor } from './interceptors/wrap-response.intercepto
     { provide: APP_INTERCEPTOR, useClass: TimeoutInterceptor },
   ],
 })
-export class CommonModule {}
+export class CommonModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggingMiddleware).forRoutes('*');
+  }
+}
