@@ -1,5 +1,5 @@
 import { Coffee } from './entities/coffee.entity';
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Scope } from '@nestjs/common';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
@@ -7,9 +7,12 @@ import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { Flavor } from './entities/flavor.entity';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
-import { COFFEE_BRANDS } from './coffees.constants';
+import { COFFEE_BRANDS, COFFEE_FLAVORS } from './coffees.constants';
 
-@Injectable() // 此装饰器将CoffeesService类标记为“提供者”
+@Injectable({ scope: Scope.REQUEST }) // 此装饰器将CoffeesService类标记为“提供者”
+// scope: Scope.DEFAULT 默认值 只实例化一次
+// scope: Scope.TRANSIENT 转瞬的 每次都会实例化
+// scope: Scope.REQUEST 会在每次请求时 实例化 并在请求完后进行垃圾回收  使用与回去ip adress, cookies, headers
 export class CoffeesService {
   constructor(
     @InjectRepository(Coffee)
@@ -20,8 +23,12 @@ export class CoffeesService {
 
     @Inject(COFFEE_BRANDS)
     coffeeBrands: string[],
+
+    @Inject(COFFEE_FLAVORS)
+    coffeeFlavors: string[],
   ) {
     console.log(coffeeBrands);
+    console.log(coffeeFlavors);
   }
 
   findAll(paginationQuery: PaginationQueryDto) {
