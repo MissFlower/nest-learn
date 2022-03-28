@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CatsController } from './cats/cats.controller';
-import { AbcController } from './modules/abc/abc.controller';
 import { CoffeesModule } from './coffees/coffees.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
@@ -23,7 +21,7 @@ import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
     }),
     CoffeeRatingModule,
   ],
-  controllers: [AppController, CatsController, AbcController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
