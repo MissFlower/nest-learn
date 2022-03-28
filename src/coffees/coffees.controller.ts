@@ -18,13 +18,16 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Public } from 'src/common/decorators/public.decorator';
 import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller('coffees')
+@ApiTags('coffees') // swagger文档分组
 export class CoffeesController {
   constructor(private readonly coffeesService: CoffeesService) {
     console.log('CoffeesController created');
   }
 
+  @ApiForbiddenResponse({ description: 'Forbidden.' }) // swagger文档中会出现403状态
   @Public()
   @Get()
   // localhost:3000/coffees?limit=20&offset=10
