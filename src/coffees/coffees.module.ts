@@ -8,7 +8,6 @@ import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_FLAVORS } from './coffees.constants';
 import { ConfigModule } from '@nestjs/config';
 import coffeesConfig from './config/coffees.config';
-import { DataSource } from 'typeorm';
 
 class ConfigService {}
 class DevelopmentConfigService {}

@@ -74,3 +74,15 @@ Nest is [MIT licensed](LICENSE).
 
 ## test
 每一个Controller、Provider、Service等都应该有自己的测试文件
+
+### npm和pnpm控制台上表现形式不一样 运行命令还是要用npm
+## 使用npm run test:e2e
+Stopping nest-app_test-db_1 ... done
+Going to remove nest-app_test-db_1
+Removing nest-app_test-db_1 ... done
+## 使用pnpm test:e2e
+Test Suites: 1 passed, 1 total
+Tests:       5 todo, 5 total
+Snapshots:   0 total
+Time:        4.492 s, estimated 5 s
+Ran all test suites matching /coffees/i.

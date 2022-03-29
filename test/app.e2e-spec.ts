@@ -2,7 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
-import { DataSource } from 'typeorm';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -11,10 +10,10 @@ describe('AppController (e2e)', () => {
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-      // providers: [{ provide: DataSource, useValue: {} }],
     }).compile();
 
     app = moduleFixture.createNestApplication(); // 该方法实例化一个实际的nest运行时环境
+
     await app.init();
   });
 
