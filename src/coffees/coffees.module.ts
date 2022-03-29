@@ -8,6 +8,7 @@ import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_FLAVORS } from './coffees.constants';
 import { ConfigModule } from '@nestjs/config';
 import coffeesConfig from './config/coffees.config';
+import { DataSource } from 'typeorm';
 
 class ConfigService {}
 class DevelopmentConfigService {}
@@ -45,7 +46,6 @@ export class CoffeeFlavorsFactory {
         flavorsFactory.create(),
       inject: [CoffeeFlavorsFactory],
     },
-    // DataSource,
   ],
   exports: [CoffeesService], // 这里需要到处 否则别的模块(coffee-rating)无法使用
 })

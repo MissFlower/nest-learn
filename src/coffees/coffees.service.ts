@@ -21,7 +21,7 @@ export class CoffeesService {
     private readonly coffeeRepository: Repository<Coffee>,
 
     @InjectRepository(Flavor)
-    private readonly flavorRepository: Repository<Flavor>, // private readonly dataSource: DataSource, // @Inject(COFFEE_BRANDS) // coffeeBrands: string[], // @Inject(COFFEE_FLAVORS) // coffeeFlavors: string[], // @Inject(coffeesConfig.KEY) // private readonly coffeesConfiguration: ConfigType<typeof coffeesConfig>,
+    private readonly flavorRepository: Repository<Flavor>, // @Inject(COFFEE_BRANDS) // coffeeBrands: string[], // @Inject(COFFEE_FLAVORS) // coffeeFlavors: string[], // @Inject(coffeesConfig.KEY) // private readonly coffeesConfiguration: ConfigType<typeof coffeesConfig>,
   ) {
     // console.log(coffeeBrands);
     // console.log(coffeeFlavors);
@@ -92,31 +92,36 @@ export class CoffeesService {
     return this.coffeeRepository.remove(coffee);
   }
 
-  // async recommendCoffee(coffee: Coffee) {
-  //   const dataSource = new DataSource({
-  //     type: 'postgres',
-  //   });
-  //   const queryRunner = dataSource.createQueryRunner();
-  //   await queryRunner.connect(); // 连接到数据库
-  //   await queryRunner.startTransaction(); // 开始交易
-  //   try {
-  //     coffee.recommendations++;
-  //     const recommendEvent = new Event();
-  //     recommendEvent.name = 'recommend_coffee';
-  //     recommendEvent.type = 'coffee';
-  //     recommendEvent.payload = { coffeeId: coffee.id };
-  //     // 使用queryRunner实体管理器来保存coffee和事件实体
-  //     await queryRunner.manager.save(coffee);
-  //     await queryRunner.manager.save(recommendEvent);
-  //     await queryRunner.commitTransaction();
-  //   } catch (err) {
-  //     // 如果出现错误 通过回滚整个事务来防止数据库中的不一致
-  //     await queryRunner.rollbackTransaction(); // 事务回滚
-  //   } finally {
-  //     // 确保一切完成以后释放或关闭queryRunner实体
-  //     await queryRunner.release();
-  //   }
-  // }
+  async recommendCoffee(coffee: Coffee) {
+    const dataSource = new DataSource({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'pass123',
+      database: 'postgres',
+    });
+    const queryRunner = dataSource.createQueryRunner();
+    await queryRunner.connect(); // 连接到数据库
+    await queryRunner.startTransaction(); // 开始交易
+    try {
+      coffee.recommendations++;
+      const recommendEvent = new Event();
+      recommendEvent.name = 'recommend_coffee';
+      recommendEvent.type = 'coffee';
+      recommendEvent.payload = { coffeeId: coffee.id };
+      // 使用queryRunner实体管理器来保存coffee和事件实体
+      await queryRunner.manager.save(coffee);
+      await queryRunner.manager.save(recommendEvent);
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      // 如果出现错误 通过回滚整个事务来防止数据库中的不一致
+      await queryRunner.rollbackTransaction(); // 事务回滚
+    } finally {
+      // 确保一切完成以后释放或关闭queryRunner实体
+      await queryRunner.release();
+    }
+  }
 
   private async preloadFlavorByName(name: string): Promise<Flavor> {
     const existingFlavor = await this.flavorRepository.findOne({

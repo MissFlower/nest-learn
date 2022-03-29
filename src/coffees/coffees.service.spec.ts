@@ -4,7 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { CoffeesService } from './coffees.service';
 import { Coffee } from './entities/coffee.entity';
-import { DataSource, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
 const createMockRepository = <T = any>(): MockRepository<T> => ({
@@ -20,7 +20,6 @@ describe('CoffeesService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         CoffeesService,
-        { provide: DataSource, useValue: {} },
         {
           provide: getRepositoryToken(Flavor),
           useValue: createMockRepository(),
