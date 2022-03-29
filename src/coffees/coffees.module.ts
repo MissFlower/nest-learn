@@ -4,7 +4,7 @@ import { CoffeesService } from './coffees.service';
 import { CoffeesController } from './coffees.controller';
 import { Module, Injectable } from '@nestjs/common';
 import { Flavor } from './entities/flavor.entity';
-import { Event } from 'src/events/entities/event.entity';
+import { Event } from '../events/entities/event.entity';
 import { COFFEE_BRANDS, COFFEE_FLAVORS } from './coffees.constants';
 import { ConfigModule } from '@nestjs/config';
 import coffeesConfig from './config/coffees.config';
@@ -45,6 +45,7 @@ export class CoffeeFlavorsFactory {
         flavorsFactory.create(),
       inject: [CoffeeFlavorsFactory],
     },
+    // DataSource,
   ],
   exports: [CoffeesService], // 这里需要到处 否则别的模块(coffee-rating)无法使用
 })
