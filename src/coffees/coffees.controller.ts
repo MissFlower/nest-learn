@@ -53,6 +53,7 @@ export class CoffeesController {
     // return `This action retruns #${id} coffee`;
   }
 
+  @Public()
   @Post('create')
   // 访问全部的body参数
   create(@Body() createCoffeeDto: CreateCoffeeDto) {
