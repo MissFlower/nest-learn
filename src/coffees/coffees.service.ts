@@ -1,3 +1,4 @@
+import { PaginationQueryDto } from './../common/dto/pagination-query.dto';
 import { Coffee, CoffeeSchema } from './entites/coffee.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -12,8 +13,9 @@ export class CoffeesService {
     private readonly coffeeModel: Model<Coffee>,
   ) {}
 
-  findAll() {
-    return this.coffeeModel.find().exec();
+  findAll(paginationQuery: PaginationQueryDto) {
+    const { limit, offset } = paginationQuery;
+    return this.coffeeModel.find().skip(offset).limit(limit).exec();
   }
 
   async findOne(id: string) {
